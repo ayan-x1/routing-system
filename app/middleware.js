@@ -1,31 +1,38 @@
 import { NextResponse } from "next/server";
 
-const protectedRoutes = ["/add-task", "/show-all-tasks"];
-const authRoutes = ["/login", "/signup"];
+const PROTECTED_ROUTES = ["/show-all-tasks", "/add-task"];
+const AUTH_ROUTES = ["/login", "/signup"];
 
 export function middleware(req) {
   const { pathname } = req.nextUrl;
   const token = req.cookies.get("token")?.value;
 
-  const isProtected = protectedRoutes.some((p) => pathname.startsWith(p));
-  const isAuth = authRoutes.some((p) => pathname.startsWith(p));
+  const isProtected = PROTECTED_ROUTES.some((route) =>
+    pathname.startsWith(route)
+  );
+
+  const isAuth = AUTH_ROUTES.some((route) =>
+    pathname.startsWith(route)
+  );
 
   if (isProtected && !token) {
-    const url = req.nextUrl.clone();
-    url.pathname = "/login";
-    url.searchParams.set("returnUrl", pathname);
-    return NextResponse.redirect(url);
+    const loginUrl = new URL("/login", req.url);
+    loginUrl.searchParams.set("returnUrl", pathname);
+    return NextResponse.redirect(loginUrl);
   }
 
   if (isAuth && token) {
-    const url = req.nextUrl.clone();
-    url.pathname = "/show-all-tasks";
-    return NextResponse.redirect(url);
+    return NextResponse.redirect(new URL("/show-all-tasks", req.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/add-task/:path*", "/show-all-tasks/:path*", "/login", "/signup"],
+  matcher: [
+    "/show-all-tasks/:path*",
+    "/add-task/:path*",
+    "/login",
+    "/signup",
+  ],
 };
