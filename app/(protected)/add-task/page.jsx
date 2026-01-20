@@ -21,7 +21,7 @@ export default function AddTaskPage() {
     const data = await res.json();
 
     if (!res.ok) {
-      setMsg(data.message || "Failed");
+      setMsg(data.message || "Failed to add task");
       return;
     }
 
@@ -30,23 +30,36 @@ export default function AddTaskPage() {
   }
 
   return (
-    <div>
-      <h1>Add Task</h1>
+    <div className="min-h-screen flex items-center justify-center p-6">
+      <div className="theme-card p-8 w-full max-w-md shadow-lg border border-white/10">
 
-      <form
-        onSubmit={addTask}
-        style={{ display: "flex", gap: 10, maxWidth: 520 }}
-      >
-        <input
-          placeholder="Task title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          style={{ flex: 1 }}
-        />
-        <button type="submit">Add</button>
-      </form>
+        <h1 className="text-2xl font-bold text-center mb-6 theme-primary">
+          Add New Task
+        </h1>
 
-      {msg && <p>{msg}</p>}
+        <form onSubmit={addTask} className="flex gap-3">
+          <input
+            className="flex-1 bg-transparent border border-white/20 rounded-lg px-4 py-2 outline-none focus:border-sky-400"
+            placeholder="Enter task title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+
+          <button
+            type="submit"
+            className="theme-btn px-5 rounded-lg font-semibold transition"
+          >
+            Add
+          </button>
+        </form>
+
+        {msg && (
+          <p className="text-center mt-4 text-sm text-red-400">
+            {msg}
+          </p>
+        )}
+
+      </div>
     </div>
   );
 }
