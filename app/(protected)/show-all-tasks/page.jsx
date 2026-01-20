@@ -78,44 +78,70 @@ export default function ShowTasksPage() {
   }, []);
 
   return (
-    <div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <h1>All Tasks</h1>
-        <div style={{ display: "flex", gap: 12 }}>
-          <Link href="/add-task">Add Task</Link>
-          <button onClick={logout}>Logout</button>
+    <div className="min-h-screen p-6 flex justify-center">
+      <div className="w-full max-w-3xl theme-card p-6 shadow-lg border border-white/10">
+
+        {/* Header */}
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold theme-primary">All Tasks</h1>
+          <div className="flex gap-3">
+            <Link
+              href="/add-task"
+              className="border border-sky-400 text-sky-400 px-4 py-1.5 rounded-lg hover:bg-sky-400 hover:text-black transition"
+            >
+              Add Task
+            </Link>
+            <button
+              onClick={logout}
+              className="border border-red-400 text-red-400 px-4 py-1.5 rounded-lg hover:bg-red-400 hover:text-black transition"
+            >
+              Logout
+            </button>
+          </div>
         </div>
-      </div>
 
-      {msg && <p style={{ color: "red" }}>{msg}</p>}
-      {loading && <p>Loading...</p>}
+        {/* Messages */}
+        {msg && <p className="text-red-400 mb-4">{msg}</p>}
+        {loading && <p className="opacity-80">Loading...</p>}
 
-      {!loading && tasks.length === 0 ? (
-        <p>No tasks yet.</p>
-      ) : (
-        <ul style={{ paddingLeft: 18 }}>
-          {tasks.map((t) => (
-            <li key={t._id} style={{ marginBottom: 10 }}>
-              <span style={{ marginRight: 10 }}>
-                {t.done ? "Done :" : "Pending :"} {t.title}
-              </span>
-              <button
-                onClick={() => toggle(t._id)}
-                style={{ marginRight: 8 }}
+        {/* Task List */}
+        {!loading && tasks.length === 0 ? (
+          <p className="opacity-70 text-center">No tasks yet.</p>
+        ) : (
+          <ul className="space-y-3">
+            {tasks.map((t) => (
+              <li
+                key={t._id}
+                className="flex justify-between items-center border border-white/10 rounded-lg px-4 py-3"
               >
-                Toggle Status
-              </button>
-              <button onClick={() => remove(t._id)}>Delete</button>
-            </li>
-          ))}
-        </ul>
-      )}
+                <span
+                  className={`${
+                    t.done ? "line-through opacity-60" : ""
+                  }`}
+                >
+                  {t.done ? "✅ Done:" : "⏳ Pending:"} {t.title}
+                </span>
+
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => toggle(t._id)}
+                    className="border border-yellow-400 text-yellow-400 px-3 py-1 rounded hover:bg-yellow-400 hover:text-black transition"
+                  >
+                    Toggle
+                  </button>
+
+                  <button
+                    onClick={() => remove(t._id)}
+                    className="border border-red-400 text-red-400 px-3 py-1 rounded hover:bg-red-400 hover:text-black transition"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 }
