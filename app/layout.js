@@ -1,3 +1,5 @@
+import "./globals.css";
+
 export const metadata = {
   title: "Task Manager",
 };
@@ -5,7 +7,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body style={{ fontFamily: "system-ui", padding: 20 }}>{children}</body>
+      <body className="bg-black text-white min-h-screen">
+        {children}
+      </body>
     </html>
   );
 }
